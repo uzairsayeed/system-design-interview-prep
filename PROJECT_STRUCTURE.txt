@@ -1,0 +1,17 @@
+system-design-interview-prep/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── CONTRIBUTING.md
+└── ml-job-execution-platform/
+    ├── README.md
+    ├── diagrams/
+    │   ├── architecture.svg
+    │   ├── reliability-flows.svg
+    │   ├── ml-job-execution-hld.excalidraw
+    │   └── ml-job-execution-hld.drawio
+    └── docs/
+        ├── api-contracts.md
+        ├── data-model.md
+        ├── failure-scenarios.md
+        └── interview-walkthrough.md
