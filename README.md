@@ -33,7 +33,7 @@ Each design starts with requirements and scale, then progressively covers:
 The goal is not to present one universally correct architecture. The goal is to make assumptions explicit, identify the most important correctness boundaries, and explain why each design decision was made.
 
 > [!NOTE]
-> These are independent educational designs. They do not represent the internal architecture of DigitalOcean or any other company.
+> These are independent educational designs. They do not represent the internal architecture of any company.
 
 ---
 
