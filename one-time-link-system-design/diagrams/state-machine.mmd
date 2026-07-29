@@ -1,0 +1,8 @@
+stateDiagram-v2
+    [*] --> ACTIVE
+    ACTIVE --> CONSUMED: Successful atomic consume
+    ACTIVE --> REVOKED: Creator or tenant admin revokes
+    ACTIVE --> EXPIRED: expires_at <= database time
+    CONSUMED --> [*]
+    REVOKED --> [*]
+    EXPIRED --> [*]

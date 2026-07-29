@@ -1,0 +1,29 @@
+sequenceDiagram
+    participant A as Request A
+    participant B as Request B
+    participant API as Consumption Service
+    participant Redis
+    participant DB as PostgreSQL Primary
+    participant KMS
+
+    par Concurrent requests
+        A->>API: POST /v/{token}/consume
+        B->>API: POST /v/{token}/consume
+    end
+
+    API->>Redis: Check unavailable cache
+    Redis-->>API: Miss
+
+    par Conditional updates
+        API->>DB: ACTIVE → CONSUMED RETURNING metadata
+        API->>DB: ACTIVE → CONSUMED RETURNING metadata
+    end
+
+    DB-->>API: Request A updates 1 row
+    DB-->>API: Request B updates 0 rows
+
+    API->>Redis: Cache token as unavailable
+    API-->>B: LINK_UNAVAILABLE
+    API->>KMS: Unwrap data key
+    KMS-->>API: DEK in memory
+    API-->>A: Protected content

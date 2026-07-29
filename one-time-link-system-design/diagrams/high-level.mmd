@@ -1,0 +1,14 @@
+flowchart LR
+    Creator[Authenticated Creator] --> Gateway[Global API Gateway]
+    Recipient[Anonymous Recipient] --> Gateway
+    Gateway --> Management[Management Service]
+    Gateway --> Consumption[Public Consumption Service]
+    Management -->|Create / Revoke| Primary[(PostgreSQL Primary)]
+    Management -->|List / Detail| Replicas[(Read Replicas)]
+    Consumption --> Redis[(Redis)]
+    Consumption -->|Atomic ACTIVE → CONSUMED| Primary
+    Primary --> Outbox[Transactional Outbox]
+    Outbox --> Audit[Audit / Analytics Pipeline]
+    Consumption --> KMS[KMS]
+    Consumption --> ObjectStore[Private Object Storage]
+    Expiry[Expiry Sweeper] --> Primary
