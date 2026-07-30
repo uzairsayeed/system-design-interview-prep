@@ -1,0 +1,36 @@
+sequenceDiagram
+    participant U as Visitor
+    participant CDN
+    participant API as Redirect Service
+    participant L1 as Local L1
+    participant Redis
+    participant DB as Redirect Store
+    participant Stream as Click Stream
+
+    U->>CDN: GET /{short_code}
+
+    alt CDN hit
+        CDN-->>U: 301/302 + Location
+    else CDN miss
+        CDN->>API: Origin request
+        API->>L1: Lookup
+
+        alt L1 hit
+            L1-->>API: Mapping
+        else L1 miss
+            API->>Redis: GET mapping
+
+            alt Redis hit
+                Redis-->>API: Mapping
+                API->>L1: Populate
+            else Redis miss
+                API->>DB: Indexed lookup
+                DB-->>API: Mapping or unavailable
+                API->>Redis: Populate or negative-cache
+                API->>L1: Populate
+            end
+        end
+
+        API-->>U: 301/302 + Location
+        API-->>Stream: Best-effort click event
+    end

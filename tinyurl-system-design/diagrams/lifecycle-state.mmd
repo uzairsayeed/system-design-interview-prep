@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> ACTIVE
+    ACTIVE --> DISABLED: Disable
+    DISABLED --> ACTIVE: Enable
+    ACTIVE --> DELETED: Soft delete
+    DISABLED --> DELETED: Soft delete
+    ACTIVE --> EXPIRED: expires_at reached
+    DISABLED --> EXPIRED: expires_at reached
+    DELETED --> [*]
+    EXPIRED --> [*]

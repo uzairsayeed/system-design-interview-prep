@@ -1,0 +1,19 @@
+flowchart TB
+    Client[Global Visitor] --> Edge[Global CDN / Edge Routing]
+
+    Edge --> R1[Region A Redirect Tier]
+    Edge --> R2[Region B Redirect Tier]
+    Edge --> R3[Region C Redirect Tier]
+
+    R1 --> C1[(Regional Cache / Read Store)]
+    R2 --> C2[(Regional Cache / Read Store)]
+    R3 --> C3[(Regional Cache / Read Store)]
+
+    Writer[Authoritative Write Region] --> Primary[(Primary Link Store)]
+    Primary --> Outbox[Lifecycle Outbox]
+    Outbox --> Stream[Global Lifecycle Stream]
+
+    Stream --> C1
+    Stream --> C2
+    Stream --> C3
+    Stream --> Purge[CDN Purge / Invalidation]

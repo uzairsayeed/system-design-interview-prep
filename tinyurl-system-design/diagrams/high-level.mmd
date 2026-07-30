@@ -1,0 +1,18 @@
+flowchart LR
+    Creator[Authenticated / Anonymous Creator] --> Gateway[API Gateway]
+    Visitor[Visitor] --> CDN[CDN / Edge Cache]
+    Gateway --> Management[Management Service]
+    CDN --> Redirect[Redirect Service]
+    Management --> Primary[(PostgreSQL Primary)]
+    Management --> ReadReplica[(Read Replicas)]
+    Redirect --> L1[Application L1 Cache]
+    L1 --> Redis[(Regional Redis)]
+    Redis --> ReadStore[(Regional Redirect Store)]
+    Primary --> Outbox[Transactional Outbox]
+    Outbox --> Lifecycle[Lifecycle Event Stream]
+    Lifecycle --> Invalidator[Cache Invalidation Consumers]
+    Invalidator --> Redis
+    Invalidator --> CDN
+    Redirect --> ClickStream[Click Event Stream]
+    ClickStream --> Consumers[Analytics Consumers]
+    Consumers --> AnalyticsStore[(Analytics Store)]
